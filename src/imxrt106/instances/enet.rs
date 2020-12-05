@@ -23,20 +23,22 @@ pub use crate::imxrt106::peripherals::enet::{
     TCCR1, TCCR2, TCCR3, TCR, TCSR0, TCSR1, TCSR2, TCSR3, TDAR, TDSR, TFWR, TGSR, TIPG, TSEM, TXIC,
 };
 
-/// Access functions for the ENET peripheral instance
-pub mod ENET {
+/// Access functions for the ENET1 peripheral instance
+pub mod ENET1 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U1>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x402d8000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
-    /// Reset values for each field in ENET
+    /// Reset values for each field in ENET1
     pub const reset: ResetValues = ResetValues {
         EIR: 0x00000000,
         EIMR: 0x00000000,
@@ -148,9 +150,9 @@ pub mod ENET {
     #[allow(renamed_and_removed_lints)]
     #[allow(private_no_mangle_statics)]
     #[no_mangle]
-    static mut ENET_TAKEN: bool = false;
+    static mut ENET1_TAKEN: bool = false;
 
-    /// Safe access to ENET
+    /// Safe access to ENET1
     ///
     /// This function returns `Some(Instance)` if this instance is not
     /// currently taken, and `None` if it is. This ensures that if you
@@ -166,16 +168,16 @@ pub mod ENET {
     #[inline]
     pub fn take() -> Option<Instance> {
         external_cortex_m::interrupt::free(|_| unsafe {
-            if ENET_TAKEN {
+            if ENET1_TAKEN {
                 None
             } else {
-                ENET_TAKEN = true;
+                ENET1_TAKEN = true;
                 Some(INSTANCE)
             }
         })
     }
 
-    /// Release exclusive access to ENET
+    /// Release exclusive access to ENET1
     ///
     /// This function allows you to return an `Instance` so that it
     /// is available to `take()` again. This function will panic if
@@ -185,15 +187,15 @@ pub mod ENET {
     #[inline]
     pub fn release(inst: Instance) {
         external_cortex_m::interrupt::free(|_| unsafe {
-            if ENET_TAKEN && inst.addr == INSTANCE.addr {
-                ENET_TAKEN = false;
+            if ENET1_TAKEN && inst.addr == INSTANCE.addr {
+                ENET1_TAKEN = false;
             } else {
                 panic!("Released a peripheral which was not taken");
             }
         });
     }
 
-    /// Unsafely steal ENET
+    /// Unsafely steal ENET1
     ///
     /// This function is similar to take() but forcibly takes the
     /// Instance, marking it as taken irregardless of its previous
@@ -201,12 +203,12 @@ pub mod ENET {
     #[cfg(not(feature = "nosync"))]
     #[inline]
     pub unsafe fn steal() -> Instance {
-        ENET_TAKEN = true;
+        ENET1_TAKEN = true;
         INSTANCE
     }
 }
 
-/// Raw pointer to ENET
+/// Raw pointer to ENET1
 ///
 /// Dereferencing this is unsafe because you are not ensured unique
 /// access to the peripheral, so you may encounter data races with
@@ -215,19 +217,21 @@ pub mod ENET {
 ///
 /// This constant is provided for ease of use in unsafe code: you can
 /// simply call for example `write_reg!(gpio, GPIOA, ODR, 1);`.
-pub const ENET: *const RegisterBlock = 0x402d8000 as *const _;
+pub const ENET1: *const RegisterBlock = 0x402d8000 as *const _;
 
 /// Access functions for the ENET2 peripheral instance
 pub mod ENET2 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U2>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x402d4000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in ENET2

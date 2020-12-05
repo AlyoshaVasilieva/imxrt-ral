@@ -16,14 +16,16 @@ pub use crate::imxrt106::peripherals::usbphy::{
 /// Access functions for the USBPHY1 peripheral instance
 pub mod USBPHY1 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U1>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x400d9000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in USBPHY1
@@ -133,14 +135,16 @@ pub const USBPHY1: *const RegisterBlock = 0x400d9000 as *const _;
 /// Access functions for the USBPHY2 peripheral instance
 pub mod USBPHY2 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U2>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x400da000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in USBPHY2

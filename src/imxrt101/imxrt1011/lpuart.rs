@@ -2422,12 +2422,13 @@ pub struct ResetValues {
     pub WATER: u32,
 }
 #[cfg(not(feature = "nosync"))]
-pub struct Instance {
+pub struct Instance<N> {
     pub(crate) addr: u32,
     pub(crate) _marker: PhantomData<*const RegisterBlock>,
+    pub(crate) _inst: PhantomData<N>,
 }
 #[cfg(not(feature = "nosync"))]
-impl ::core::ops::Deref for Instance {
+impl<N> ::core::ops::Deref for Instance<N> {
     type Target = RegisterBlock;
     #[inline(always)]
     fn deref(&self) -> &RegisterBlock {
@@ -2435,19 +2436,21 @@ impl ::core::ops::Deref for Instance {
     }
 }
 
-unsafe impl Send for Instance {}
+unsafe impl<N: Send> Send for Instance<N> {}
 
 /// Access functions for the LPUART1 peripheral instance
 pub mod LPUART1 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U1>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x40184000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in LPUART1
@@ -2542,14 +2545,16 @@ pub const LPUART1: *const RegisterBlock = 0x40184000 as *const _;
 /// Access functions for the LPUART2 peripheral instance
 pub mod LPUART2 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U2>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x40188000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in LPUART2
@@ -2644,14 +2649,16 @@ pub const LPUART2: *const RegisterBlock = 0x40188000 as *const _;
 /// Access functions for the LPUART3 peripheral instance
 pub mod LPUART3 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U3>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x4018c000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in LPUART3
@@ -2746,14 +2753,16 @@ pub const LPUART3: *const RegisterBlock = 0x4018c000 as *const _;
 /// Access functions for the LPUART4 peripheral instance
 pub mod LPUART4 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U4>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x40190000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in LPUART4

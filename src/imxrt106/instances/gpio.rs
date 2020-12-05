@@ -14,14 +14,16 @@ pub use crate::imxrt106::peripherals::gpio::{
 /// Access functions for the GPIO1 peripheral instance
 pub mod GPIO1 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U1>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x401b8000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in GPIO1
@@ -115,14 +117,16 @@ pub const GPIO1: *const RegisterBlock = 0x401b8000 as *const _;
 /// Access functions for the GPIO2 peripheral instance
 pub mod GPIO2 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U2>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x401bc000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in GPIO2
@@ -216,14 +220,16 @@ pub const GPIO2: *const RegisterBlock = 0x401bc000 as *const _;
 /// Access functions for the GPIO3 peripheral instance
 pub mod GPIO3 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U3>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x401c0000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in GPIO3
@@ -317,14 +323,16 @@ pub const GPIO3: *const RegisterBlock = 0x401c0000 as *const _;
 /// Access functions for the GPIO4 peripheral instance
 pub mod GPIO4 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U4>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x401c4000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in GPIO4
@@ -418,14 +426,16 @@ pub const GPIO4: *const RegisterBlock = 0x401c4000 as *const _;
 /// Access functions for the GPIO5 peripheral instance
 pub mod GPIO5 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U5>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x400c0000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in GPIO5
@@ -519,14 +529,16 @@ pub const GPIO5: *const RegisterBlock = 0x400c0000 as *const _;
 /// Access functions for the GPIO6 peripheral instance
 pub mod GPIO6 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U6>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x42000000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in GPIO6
@@ -620,14 +632,16 @@ pub const GPIO6: *const RegisterBlock = 0x42000000 as *const _;
 /// Access functions for the GPIO7 peripheral instance
 pub mod GPIO7 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U7>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x42004000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in GPIO7
@@ -721,14 +735,16 @@ pub const GPIO7: *const RegisterBlock = 0x42004000 as *const _;
 /// Access functions for the GPIO8 peripheral instance
 pub mod GPIO8 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U8>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x42008000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in GPIO8
@@ -822,14 +838,16 @@ pub const GPIO8: *const RegisterBlock = 0x42008000 as *const _;
 /// Access functions for the GPIO9 peripheral instance
 pub mod GPIO9 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U9>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x4200c000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in GPIO9

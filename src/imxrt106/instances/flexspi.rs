@@ -24,20 +24,22 @@ pub use crate::imxrt106::peripherals::flexspi::{
     TFDR28, TFDR29, TFDR3, TFDR30, TFDR31, TFDR4, TFDR5, TFDR6, TFDR7, TFDR8, TFDR9,
 };
 
-/// Access functions for the FLEXSPI peripheral instance
-pub mod FLEXSPI {
+/// Access functions for the FLEXSPI1 peripheral instance
+pub mod FLEXSPI1 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U1>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x402a8000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
-    /// Reset values for each field in FLEXSPI
+    /// Reset values for each field in FLEXSPI1
     pub const reset: ResetValues = ResetValues {
         MCR0: 0xFFFF80C2,
         MCR1: 0xFFFFFFFF,
@@ -211,9 +213,9 @@ pub mod FLEXSPI {
     #[allow(renamed_and_removed_lints)]
     #[allow(private_no_mangle_statics)]
     #[no_mangle]
-    static mut FLEXSPI_TAKEN: bool = false;
+    static mut FLEXSPI1_TAKEN: bool = false;
 
-    /// Safe access to FLEXSPI
+    /// Safe access to FLEXSPI1
     ///
     /// This function returns `Some(Instance)` if this instance is not
     /// currently taken, and `None` if it is. This ensures that if you
@@ -229,16 +231,16 @@ pub mod FLEXSPI {
     #[inline]
     pub fn take() -> Option<Instance> {
         external_cortex_m::interrupt::free(|_| unsafe {
-            if FLEXSPI_TAKEN {
+            if FLEXSPI1_TAKEN {
                 None
             } else {
-                FLEXSPI_TAKEN = true;
+                FLEXSPI1_TAKEN = true;
                 Some(INSTANCE)
             }
         })
     }
 
-    /// Release exclusive access to FLEXSPI
+    /// Release exclusive access to FLEXSPI1
     ///
     /// This function allows you to return an `Instance` so that it
     /// is available to `take()` again. This function will panic if
@@ -248,15 +250,15 @@ pub mod FLEXSPI {
     #[inline]
     pub fn release(inst: Instance) {
         external_cortex_m::interrupt::free(|_| unsafe {
-            if FLEXSPI_TAKEN && inst.addr == INSTANCE.addr {
-                FLEXSPI_TAKEN = false;
+            if FLEXSPI1_TAKEN && inst.addr == INSTANCE.addr {
+                FLEXSPI1_TAKEN = false;
             } else {
                 panic!("Released a peripheral which was not taken");
             }
         });
     }
 
-    /// Unsafely steal FLEXSPI
+    /// Unsafely steal FLEXSPI1
     ///
     /// This function is similar to take() but forcibly takes the
     /// Instance, marking it as taken irregardless of its previous
@@ -264,12 +266,12 @@ pub mod FLEXSPI {
     #[cfg(not(feature = "nosync"))]
     #[inline]
     pub unsafe fn steal() -> Instance {
-        FLEXSPI_TAKEN = true;
+        FLEXSPI1_TAKEN = true;
         INSTANCE
     }
 }
 
-/// Raw pointer to FLEXSPI
+/// Raw pointer to FLEXSPI1
 ///
 /// Dereferencing this is unsafe because you are not ensured unique
 /// access to the peripheral, so you may encounter data races with
@@ -278,19 +280,21 @@ pub mod FLEXSPI {
 ///
 /// This constant is provided for ease of use in unsafe code: you can
 /// simply call for example `write_reg!(gpio, GPIOA, ODR, 1);`.
-pub const FLEXSPI: *const RegisterBlock = 0x402a8000 as *const _;
+pub const FLEXSPI1: *const RegisterBlock = 0x402a8000 as *const _;
 
 /// Access functions for the FLEXSPI2 peripheral instance
 pub mod FLEXSPI2 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U2>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x402a4000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in FLEXSPI2

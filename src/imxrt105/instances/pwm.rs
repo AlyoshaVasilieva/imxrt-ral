@@ -36,14 +36,16 @@ pub use crate::imxrt105::peripherals::pwm::{
 /// Access functions for the PWM1 peripheral instance
 pub mod PWM1 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U1>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x403dc000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in PWM1
@@ -309,14 +311,16 @@ pub const PWM1: *const RegisterBlock = 0x403dc000 as *const _;
 /// Access functions for the PWM2 peripheral instance
 pub mod PWM2 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U2>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x403e0000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in PWM2
@@ -582,14 +586,16 @@ pub const PWM2: *const RegisterBlock = 0x403e0000 as *const _;
 /// Access functions for the PWM3 peripheral instance
 pub mod PWM3 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U3>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x403e4000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in PWM3
@@ -855,14 +861,16 @@ pub const PWM3: *const RegisterBlock = 0x403e4000 as *const _;
 /// Access functions for the PWM4 peripheral instance
 pub mod PWM4 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U4>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x403e8000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in PWM4

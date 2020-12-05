@@ -42,14 +42,16 @@ pub use crate::imxrt105::peripherals::can::{
 /// Access functions for the CAN1 peripheral instance
 pub mod CAN1 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U1>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x401d0000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in CAN1
@@ -472,14 +474,16 @@ pub const CAN1: *const RegisterBlock = 0x401d0000 as *const _;
 /// Access functions for the CAN2 peripheral instance
 pub mod CAN2 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U2>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x401d4000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in CAN2

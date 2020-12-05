@@ -14,14 +14,16 @@ pub use crate::imxrt105::peripherals::aoi::{
 /// Access functions for the AOI1 peripheral instance
 pub mod AOI1 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U1>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x403b4000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in AOI1
@@ -112,14 +114,16 @@ pub const AOI1: *const RegisterBlock = 0x403b4000 as *const _;
 /// Access functions for the AOI2 peripheral instance
 pub mod AOI2 {
     use super::ResetValues;
+    use typenum::*;
 
     #[cfg(not(feature = "nosync"))]
-    use super::Instance;
+    pub type Instance = super::Instance<U2>;
 
     #[cfg(not(feature = "nosync"))]
     const INSTANCE: Instance = Instance {
         addr: 0x403b8000,
         _marker: ::core::marker::PhantomData,
+        _inst: ::core::marker::PhantomData,
     };
 
     /// Reset values for each field in AOI2
