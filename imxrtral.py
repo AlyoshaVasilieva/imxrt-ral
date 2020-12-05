@@ -827,18 +827,20 @@ class PeripheralPrototype(Node):
         if self.emit_generic_instance:
             inst = """pub struct Instance<N> {
                 pub(crate) addr: u32,
-                pub(crate) _marker: PhantomData<*const RegisterBlock>,
+                pub(crate) _marker: PhantomData<*mut RegisterBlock>,
                 pub(crate) _inst: PhantomData<N>,
             }"""
             send = "unsafe impl<N: Send> Send for Instance<N> {}"
             impl_deref = "impl<N> ::core::ops::Deref for Instance<N>"
+            impl_deref_mut = "impl<N> ::core::ops::DerefMut for Instance<N>"
         else:
             inst = """pub struct Instance {
                 pub(crate) addr: u32,
-                pub(crate) _marker: PhantomData<*const RegisterBlock>,
+                pub(crate) _marker: PhantomData<*mut RegisterBlock>,
             }"""
             send = "unsafe impl Send for Instance {}"
             impl_deref = "impl ::core::ops::Deref for Instance"
+            impl_deref_mut = "impl ::core::ops::DerefMut for Instance"
         return f"""
         #[cfg(not(feature="nosync"))]
         {inst}
@@ -850,7 +852,13 @@ class PeripheralPrototype(Node):
                 unsafe {{ &*(self.addr as *const _) }}
             }}
         }}
-
+        #[cfg(not(feature="nosync"))]
+        {impl_deref_mut} {{
+            #[inline(always)]
+            fn deref_mut(&mut self) -> &mut RegisterBlock {{
+                unsafe {{ &mut *(self.addr as *mut _) }}
+            }}
+        }}
         {send}
 
         """
