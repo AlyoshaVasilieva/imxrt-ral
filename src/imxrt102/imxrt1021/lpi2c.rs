@@ -2689,7 +2689,7 @@ pub struct ResetValues {
 #[cfg(not(feature = "nosync"))]
 pub struct Instance<N> {
     pub(crate) addr: u32,
-    pub(crate) _marker: PhantomData<*const RegisterBlock>,
+    pub(crate) _marker: PhantomData<*mut RegisterBlock>,
     pub(crate) _inst: PhantomData<N>,
 }
 #[cfg(not(feature = "nosync"))]
@@ -2700,7 +2700,13 @@ impl<N> ::core::ops::Deref for Instance<N> {
         unsafe { &*(self.addr as *const _) }
     }
 }
-
+#[cfg(not(feature = "nosync"))]
+impl<N> ::core::ops::DerefMut for Instance<N> {
+    #[inline(always)]
+    fn deref_mut(&mut self) -> &mut RegisterBlock {
+        unsafe { &mut *(self.addr as *mut _) }
+    }
+}
 unsafe impl<N: Send> Send for Instance<N> {}
 
 /// Access functions for the LPI2C1 peripheral instance

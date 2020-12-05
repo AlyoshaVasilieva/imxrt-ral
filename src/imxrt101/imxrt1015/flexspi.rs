@@ -3709,7 +3709,7 @@ pub struct ResetValues {
 #[cfg(not(feature = "nosync"))]
 pub struct Instance {
     pub(crate) addr: u32,
-    pub(crate) _marker: PhantomData<*const RegisterBlock>,
+    pub(crate) _marker: PhantomData<*mut RegisterBlock>,
 }
 #[cfg(not(feature = "nosync"))]
 impl ::core::ops::Deref for Instance {
@@ -3719,7 +3719,13 @@ impl ::core::ops::Deref for Instance {
         unsafe { &*(self.addr as *const _) }
     }
 }
-
+#[cfg(not(feature = "nosync"))]
+impl ::core::ops::DerefMut for Instance {
+    #[inline(always)]
+    fn deref_mut(&mut self) -> &mut RegisterBlock {
+        unsafe { &mut *(self.addr as *mut _) }
+    }
+}
 unsafe impl Send for Instance {}
 
 /// Access functions for the FLEXSPI peripheral instance
