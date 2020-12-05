@@ -78,6 +78,7 @@ no-default-features = true
 # Change dependency versions in stm32ral.py, not here!
 bare-metal = "0.2.5"
 external_cortex_m = { package = "cortex-m", version = "0.6.2" }
+typenum = "1.12.0"
 # TODO use imxrt-rt here in place cortex-m-rt = { version = "0.6.12", optional = true }
 
 [lib]
@@ -610,6 +611,9 @@ class PeripheralInstance(Node):
     peripherals there is a single PeripheralPrototype containing
     a single PeripheralInstance.
 
+    PeripheralInstances may have numbers, like the '5' in 'LPUART5.'
+    Numbers are optional.
+
     Has a name and base address.
     Belongs to a parent PeripheralPrototype.
     """
@@ -617,6 +621,7 @@ class PeripheralInstance(Node):
         self.name = name
         self.addr = addr
         self.reset_values = reset_values
+        self.generic_instance = False
 
     def to_dict(self):
         return {"name": self.name, "addr": self.addr,
@@ -626,18 +631,37 @@ class PeripheralInstance(Node):
         registers = {r.offset: r.name for r in registers}
         resets = ", ".join(
             f"{registers[k]}: 0x{v:08X}" for k, v in self.reset_values.items())
+
+        number = instance_number(self.name)
+
+        if self.generic_instance and number is not None:
+            import_typenum = "use typenum::*;"
+            typedef = f"""
+            #[cfg(not(feature="nosync"))]
+            pub type Instance = super::Instance<U{number}>;
+            """
+            inst_init = "_inst: ::core::marker::PhantomData,"
+        else:
+            import_typenum = ""
+            typedef = """
+            #[cfg(not(feature="nosync"))]
+            use super::Instance;
+            """
+            inst_init = ""
+
         return f"""
         /// Access functions for the {self.name} peripheral instance
         pub mod {self.name} {{
             use super::ResetValues;
-
-            #[cfg(not(feature="nosync"))]
-            use super::Instance;
+            {import_typenum}
+            
+            {typedef}
 
             #[cfg(not(feature="nosync"))]
             const INSTANCE: Instance = Instance {{
                 addr: 0x{self.addr:08x},
                 _marker: ::core::marker::PhantomData,
+                {inst_init}
             }};
 
             /// Reset values for each field in {self.name}
@@ -746,6 +770,7 @@ class PeripheralPrototype(Node):
         self.registers = []
         self.instances = []
         self.parent_device_names = []
+        self.emit_generic_instance = False
 
     def to_dict(self):
         return {"name": self.name, "desc": self.desc,
@@ -799,22 +824,34 @@ class PeripheralPrototype(Node):
 
     def to_rust_instance(self):
         """Creates an Instance struct for this peripheral."""
-        return """
+        if self.emit_generic_instance:
+            inst = """pub struct Instance<N> {
+                pub(crate) addr: u32,
+                pub(crate) _marker: PhantomData<*const RegisterBlock>,
+                pub(crate) _inst: PhantomData<N>,
+            }"""
+            send = "unsafe impl<N: Send> Send for Instance<N> {}"
+            impl_deref = "impl<N> ::core::ops::Deref for Instance<N>"
+        else:
+            inst = """pub struct Instance {
+                pub(crate) addr: u32,
+                pub(crate) _marker: PhantomData<*const RegisterBlock>,
+            }"""
+            send = "unsafe impl Send for Instance {}"
+            impl_deref = "impl ::core::ops::Deref for Instance"
+        return f"""
         #[cfg(not(feature="nosync"))]
-        pub struct Instance {
-            pub(crate) addr: u32,
-            pub(crate) _marker: PhantomData<*const RegisterBlock>,
-        }
+        {inst}
         #[cfg(not(feature="nosync"))]
-        impl ::core::ops::Deref for Instance {
+        {impl_deref} {{
             type Target = RegisterBlock;
             #[inline(always)]
-            fn deref(&self) -> &RegisterBlock {
-                unsafe { &*(self.addr as *const _) }
-            }
-        }
+            fn deref(&self) -> &RegisterBlock {{
+                unsafe {{ &*(self.addr as *const _) }}
+            }}
+        }}
 
-        unsafe impl Send for Instance {}
+        {send}
 
         """
 
@@ -883,7 +920,7 @@ class PeripheralPrototype(Node):
             df = node.attrib['derivedFrom']
             df_node = svd.find(f".//peripheral[name='{df}']")
             if df_node is None:
-                raise ValueError("Can't find derivedFrom[{df}]")
+                raise ValueError(f"Can't find derivedFrom[{df}] when processing {name}")
             desc = get_string(df_node, 'description', default=desc)
             addr = get_int(node, 'baseAddress', addr)
             registers = df_node.find('registers')
@@ -914,6 +951,9 @@ class PeripheralPrototype(Node):
         at least 3 letters long.
         """
         self.instances += other.instances
+        self.emit_generic_instance = True
+        for instance in self.instances:
+            instance.generic_instance = True
         newname = common_name(self.name, other.name, parent.name)
         if newname != self.name:
             if newname not in [p.name for p in parent.peripherals]:
@@ -1486,6 +1526,7 @@ class Family(Node):
             # Make a new PeripheralPrototype for the family, with no instances
             familyp = PeripheralPrototype(name, p.desc)
             familyp.registers = p.registers
+            familyp.emit_generic_instance = p.emit_generic_instance
             familyp.parent_device_names.append(device.name)
             self.peripherals.append(familyp)
             # Make a link for the primary member
@@ -1841,6 +1882,24 @@ def common_name(a, b, ctx=""):
         else:
             print(f"Warning [{ctx}]: {a}->{ap} and {b}->{bp} failed")
             return a
+
+
+def instance_number(instance_name):
+    """Extracts the instance number from a peripheral instance name. Returns
+    the instance number as an int, or None if there is no number in the instance
+    name.
+
+    Only extracts the numbers from the end of the instance name.
+
+    >>> instance_number("LPUART5")
+    5
+    >>> instance_number("DMA")
+    >>> instance_number("ABC123DEF456")
+    456
+    """
+    groups = itertools.groupby(instance_name, str.isdigit)
+    number_groups = ["".join(numbers) for are_digits, numbers in groups if are_digits]
+    return int(number_groups[-1]) if number_groups else None
 
 
 def parse_args():
