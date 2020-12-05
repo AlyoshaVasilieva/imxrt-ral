@@ -49,3 +49,16 @@ jobs:
       run: cargo build --verbose --features ${{ matrix.feature }}
     - name: Run tests for (${{ matrix.feature }}) RAL
       run: cargo test --verbose --features ${{ matrix.feature }}
+
+  check-imxrtral:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install virtualenv
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install Python dependencies
+      run: pip install -U -r requirements.txt
+    - name: Run Python doctests in imxrtral.py
+      run: python -m doctest -v imxrtral.py
