@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+* **BREAKING** The RAL depends on `cortex-m`, version `0.7`. All `Interrupt`
+  enumerations now implement `cortex_m::interrupt::InterruptNumber`, instead
+  of `bare_metal::Nr`.
+
 ## [0.4.0] 2020-08-29
 
 * **BREAKING** The RAL's `"rtfm"` feature is changed to `"rtic"`, reflecting the framework's
