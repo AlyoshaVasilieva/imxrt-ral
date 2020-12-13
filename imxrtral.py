@@ -76,8 +76,7 @@ no-default-features = true
 
 [dependencies]
 # Change dependency versions in stm32ral.py, not here!
-bare-metal = "0.2.5"
-external_cortex_m = { package = "cortex-m", version = "0.6.2" }
+external_cortex_m = { package = "cortex-m", version = "0.7.0" }
 # TODO use imxrt-rt here in place cortex-m-rt = { version = "0.6.12", optional = true }
 
 [lib]
@@ -1194,7 +1193,6 @@ class Device(Node):
         devicepath = os.path.join(familypath, self.name)
         iname = os.path.join(devicepath, "interrupts.rs")
         with open(iname, "w") as f:
-            f.write("extern crate bare_metal;\n")
             f.write('#[cfg(feature="rt")]\nextern "C" {\n')
             for interrupt in self.interrupts:
                 f.write(f'    fn {interrupt.name}();\n')
@@ -1236,10 +1234,10 @@ class Device(Node):
                 f.write(f"{interrupt.name} = {interrupt.value},\n")
             f.write("}\n")
             f.write("""\
-                unsafe impl bare_metal::Nr for Interrupt {
+                unsafe impl external_cortex_m::interrupt::InterruptNumber for Interrupt {
                     #[inline]
-                    fn nr(&self) -> u8 {
-                        *self as u8
+                    fn number(self) -> u16 {
+                        self as u16
                     }
                 }\n""")
         rustfmt(iname)
